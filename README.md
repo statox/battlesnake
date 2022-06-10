@@ -2,6 +2,8 @@
 
 This is the implementation of my first snake for [battlesnake](https://battlesnake.com). It is a fork of [their starter project](https://github.com/BattlesnakeOfficial/starter-snake-typescript)
 
+For now this AI is running on [this replit](https://replit.com/@statox/battlesnake)
+
 
 ## Getting started with [Battlesnake](http://play.battlesnake.com?utm_source=github&utm_medium=readme&utm_campaign=typescript_starter&utm_content=homepage) and TypeScript
 
