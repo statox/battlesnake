@@ -12,14 +12,14 @@ export function movesAllowedByWalls(gameState: GameState): PossibleMoves {
     const boardHeight = gameState.board.height;
     const myHead = gameState.you.head;
 
-    if (myHead.x >= boardWidth - 1) {
+    if (myHead.x === boardWidth - 1) {
         possibleMoves.right = false;
-    } else if (myHead.x <= 1) {
+    } else if (myHead.x === 0) {
         possibleMoves.left = false;
     }
-    if (myHead.y >= boardHeight - 1) {
+    if (myHead.y === boardHeight - 1) {
         possibleMoves.up = false;
-    } else if (myHead.y <= 1) {
+    } else if (myHead.y === 0) {
         possibleMoves.down = false;
     }
 
@@ -50,7 +50,35 @@ export function movesAllowedBySnake(me: Battlesnake, other: Battlesnake) {
     return possibleMoves;
 }
 
-export const distance = (a: Coord, b: Coord) => Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
+export const distance = (a: Coord, b: Coord) => Math.abs(b.x - a.x) + Math.abs(b.y - a.y);
+
+export const getDestination = (position: Coord, direction: string) => {
+    if (direction === 'up') {
+        return {
+            x: position.x,
+            y: position.y + 1
+        };
+    }
+    if (direction === 'down') {
+        return {
+            x: position.x,
+            y: position.y - 1
+        };
+    }
+    if (direction === 'right') {
+        return {
+            x: position.x + 1,
+            y: position.y
+        };
+    }
+    if (direction === 'left') {
+        return {
+            x: position.x - 1,
+            y: position.y
+        };
+    }
+    throw new Error(`unsupported direction ${direction}`);
+};
 
 export function findClosestFood(reference: Coord, food: Coord[]) {
     if (!food || !food.length) {
@@ -80,4 +108,15 @@ export function filterPossibleMoves(moves: PossibleMoves[]) {
         },
         {up: true, down: true, right: true, left: true}
     );
+}
+
+export function getPossibleMoves(gameState: GameState) {
+    // Don't hit walls.
+    const allowedByWalls = movesAllowedByWalls(gameState);
+
+    // Don't hit yourself or another snake.
+    const allowedBySnakes = gameState.board.snakes.map((snake) => movesAllowedBySnake(gameState.you, snake));
+
+    const filteredMoves = filterPossibleMoves([allowedByWalls, ...allowedBySnakes]);
+    return filteredMoves;
 }

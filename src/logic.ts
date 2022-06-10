@@ -1,4 +1,5 @@
-import {movesAllowedBySnake, movesAllowedByWalls, filterPossibleMoves} from './moves';
+import {selectBestMove} from './ai';
+import {movesAllowedBySnake, movesAllowedByWalls, filterPossibleMoves, getPossibleMoves} from './moves';
 import {InfoResponse, GameState, MoveResponse, Game, Coord, PossibleMoves, Move} from './types';
 
 export function info(): InfoResponse {
@@ -22,20 +23,8 @@ export function end(gameState: GameState): void {
 }
 
 export function move(gameState: GameState): MoveResponse {
-    // Don't hit walls.
-    const allowedByWalls = movesAllowedByWalls(gameState);
-
-    // Don't hit yourself or another snake.
-    const allowedBySnakes = gameState.board.snakes.map((snake) => movesAllowedBySnake(gameState.you, snake));
-
-    // TODO: Find food.
-
-    // Finally, choose a move from the available safe moves.
-    const possibleMoves = filterPossibleMoves([allowedByWalls, ...allowedBySnakes]);
-    const safeMoves = Object.keys(possibleMoves).filter((key) => possibleMoves[key]);
-    const response: MoveResponse = {
-        move: safeMoves[Math.floor(Math.random() * safeMoves.length)]
-    };
+    const move = selectBestMove(gameState);
+    const response: MoveResponse = {move};
 
     console.log(`${gameState.game.id} MOVE ${gameState.turn}: ${response.move}`);
     return response;
