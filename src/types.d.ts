@@ -1,5 +1,17 @@
 // See https://docs.battlesnake.com/references/api for all details and examples.
 
+export type Move = 'up' | 'down' | 'right' | 'left';
+
+/*
+ * export type PossibleMoves = {
+ *     up: boolean;
+ *     down: boolean;
+ *     right: boolean;
+ *     left: boolean;
+ * };
+ */
+export type PossibleMoves = {[key: string]: boolean};
+
 export interface InfoResponse {
     apiversion: string;
     author?: string;
@@ -15,14 +27,14 @@ export interface MoveResponse {
 }
 
 export interface RoyaleSettings {
-    shrinkEveryNTurns: number
+    shrinkEveryNTurns: number;
 }
 
 export interface SquadSettings {
     allowBodyCollisions: boolean;
     sharedElimination: boolean;
     sharedHealth: boolean;
-    sharedLength: boolean
+    sharedLength: boolean;
 }
 
 export interface RulesetSettings {
@@ -31,8 +43,8 @@ export interface RulesetSettings {
     hazardDamagePerTurn: number;
     hazardMap: string;
     hazardMapAuthor: string;
-    royale:RoyaleSettings;
-    squad:SquadSettings;
+    royale: RoyaleSettings;
+    squad: SquadSettings;
 }
 
 export interface Ruleset {
